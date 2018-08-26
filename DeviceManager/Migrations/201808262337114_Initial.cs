@@ -95,6 +95,8 @@ namespace DeviceManager.Migrations
                         BirthDay = c.DateTime(nullable: false, storeType: "date"),
                         IDDepartment = c.Int(nullable: false),
                         IDRole = c.Int(nullable: false),
+                        PasswordConfirm = c.String(maxLength: 256),
+                        Discriminator = c.String(nullable: false, maxLength: 128),
                     })
                 .PrimaryKey(t => t.Username)
                 .ForeignKey("dbo.Departments", t => t.IDDepartment, cascadeDelete: true)
@@ -109,8 +111,11 @@ namespace DeviceManager.Migrations
                     {
                         ID = c.Int(nullable: false, identity: true),
                         Name = c.String(nullable: false, maxLength: 256),
+                        UserAddViewModel_Username = c.String(maxLength: 100),
                     })
-                .PrimaryKey(t => t.ID);
+                .PrimaryKey(t => t.ID)
+                .ForeignKey("dbo.Users", t => t.UserAddViewModel_Username)
+                .Index(t => t.UserAddViewModel_Username);
             
             CreateTable(
                 "dbo.Receipts",
@@ -161,8 +166,11 @@ namespace DeviceManager.Migrations
                     {
                         ID = c.Int(nullable: false, identity: true),
                         Name = c.String(nullable: false, maxLength: 256),
+                        UserAddViewModel_Username = c.String(maxLength: 100),
                     })
-                .PrimaryKey(t => t.ID);
+                .PrimaryKey(t => t.ID)
+                .ForeignKey("dbo.Users", t => t.UserAddViewModel_Username)
+                .Index(t => t.UserAddViewModel_Username);
             
             CreateTable(
                 "dbo.Statuses",
@@ -191,6 +199,8 @@ namespace DeviceManager.Migrations
             DropForeignKey("dbo.DeliveryDetails", "IDDevice", "dbo.Devices");
             DropForeignKey("dbo.Deliveries", "DeliveryToUser", "dbo.Users");
             DropForeignKey("dbo.Deliveries", "DeliveryFromUser", "dbo.Users");
+            DropForeignKey("dbo.Roles", "UserAddViewModel_Username", "dbo.Users");
+            DropForeignKey("dbo.Departments", "UserAddViewModel_Username", "dbo.Users");
             DropForeignKey("dbo.Users", "IDRole", "dbo.Roles");
             DropForeignKey("dbo.Receipts", "User_Username", "dbo.Users");
             DropForeignKey("dbo.ReceiptDetails", "IDReceipt", "dbo.Receipts");
@@ -201,10 +211,12 @@ namespace DeviceManager.Migrations
             DropForeignKey("dbo.Deliveries", "User_Username", "dbo.Users");
             DropForeignKey("dbo.DeliveryDetails", "IDDelivery", "dbo.Deliveries");
             DropForeignKey("dbo.Devices", "IDCategory", "dbo.Categories");
+            DropIndex("dbo.Roles", new[] { "UserAddViewModel_Username" });
             DropIndex("dbo.ReceiptDetails", new[] { "IDDevice" });
             DropIndex("dbo.ReceiptDetails", new[] { "IDReceipt" });
             DropIndex("dbo.Receipts", new[] { "User_Username" });
             DropIndex("dbo.Receipts", new[] { "IDProvider" });
+            DropIndex("dbo.Departments", new[] { "UserAddViewModel_Username" });
             DropIndex("dbo.Users", new[] { "IDRole" });
             DropIndex("dbo.Users", new[] { "IDDepartment" });
             DropIndex("dbo.Users", "EmailIndex");

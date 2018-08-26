@@ -1,9 +1,16 @@
-﻿using DeviceManager.Models;
-using DeviceManager.Models.DB;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
-using System.Net;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Net;
+using System.Web;
 using System.Web.Mvc;
+using DeviceManager.Models;
+using DeviceManager.Models.DB;
+using DeviceManager.Areas.Admin.Models;
+using AutoMapper;
 
 namespace DeviceManager.Areas.Admin.Controllers
 {
@@ -68,13 +75,14 @@ namespace DeviceManager.Areas.Admin.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             User user = await db.Users.FindAsync(id);
-            if (user == null)
+            UserEditViewModel userEditViewModel = Mapper.Map<UserEditViewModel>(user);
+            if (user == null || userEditViewModel == null)
             {
                 return HttpNotFound();
             }
             ViewBag.IDDepartment = new SelectList(db.Departments, "ID", "Name", user.IDDepartment);
             ViewBag.IDRole = new SelectList(db.Roles, "ID", "Name", user.IDRole);
-            return View(user);
+            return View(userEditViewModel);
         }
 
         // POST: Admin/Users/Edit/5

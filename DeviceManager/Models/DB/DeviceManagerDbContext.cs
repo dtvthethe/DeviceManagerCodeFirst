@@ -24,6 +24,10 @@ namespace DeviceManager.Models.DB
 
         protected override void OnModelCreating(DbModelBuilder builder)
         {
+            //Database.SetInitializer<DeviceManagerDbContext>(null);
+            //base.OnModelCreating(builder);
         }
+
+        public System.Data.Entity.DbSet<DeviceManager.Areas.Admin.Models.UserEditViewModel> UserEditViewModels { get; set; }
     }
 }

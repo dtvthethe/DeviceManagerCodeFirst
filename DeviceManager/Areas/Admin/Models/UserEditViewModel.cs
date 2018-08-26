@@ -1,22 +1,26 @@
-﻿using DeviceManager.Models.Abstract;
+﻿using DeviceManager.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DeviceManager.Models
+namespace DeviceManager.Areas.Admin.Models
 {
-    [Table("Users")]
-    public class User
+    public class UserEditViewModel
     {
         [Key]
         [MaxLength(100)]
         [Column(TypeName = "nvarchar")]
         public string Username { get; set; }
 
-        [MaxLength(256)]
-        [Required]
-        public virtual string Password { get; set; }
+        [StringLength(256, ErrorMessage = "Must be between 5 and 255 characters", MinimumLength = 5)]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+
+        [StringLength(256, ErrorMessage = "Must be between 5 and 255 characters", MinimumLength = 5)]
+        [DataType(DataType.Password)]
+        [Compare("Password")]
+        public string PasswordConfirm { get; set; }
 
         [Index("EmailIndex", IsUnique = true)]
         [MaxLength(256)]
@@ -45,8 +49,8 @@ namespace DeviceManager.Models
         [ForeignKey("IDRole")]
         public Role Role { get; set; }
 
-        public virtual ICollection<Delivery> Deliveries { get; set; }
-        public virtual ICollection<Device> Devices { get; set; }
-        public virtual ICollection<Receipt> Receipts { get; set; }
+        public ICollection<Role> Roles { get; set; }
+
+        public ICollection<Department> Departments { get; set; }
     }
 }
