@@ -1,0 +1,26 @@
+[MIGRATION]
+- First time run: enable-migrations
+- Create migration: Add-Migration Initial
+- If update DB + insert DB to table : Update-Database
+- Add to Sql Server: Update-Database
+- refer: https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/
+
+[REPOSITORY + UNIT OF WORK]
+- refer: https://www.dotnettricks.com/learn/mvc/implementing-repository-and-unit-of-work-patterns-with-mvc
+
+[Atribute]
+https://docs.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations.displayattribute?view=netframework-4.7.2
+
+[LINQ]
+- Include : Load references list
+var users = db.Users.Include(u => u.Department).Include(u => u.Role);
+
+- Make combobox list:
+ViewBag.ABC = new SelectList(db.Departments, "ID", "Name");
+@Html.DropDownList("ABC", null, htmlAttributes: new { @class = "form-control" })
+
+????
+- Unique email
+- hash password
+- degug:
+https://stackoverflow.com/questions/36204009/disable-break-mode-page-in-vs2015
